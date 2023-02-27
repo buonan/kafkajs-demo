@@ -1,0 +1,43 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:2.11-1.1.1
+    ports:
+      - "9092:9092"
+    links:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_NUM_PARTITIONS: 2
+      #KAFKA_CREATE_TOPICS: "test-topic:2:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  # producer:
+  #   image: kafka-demo-producer:latest
+  #   depends_on:
+  #     kafka:
+  #       condition: service_started
+  # consumer-example:
+  #   image: kafka-demo-consumer:latest
+  #   environment:
+  #     CONSUMER_TOPIC: example-topic
+  #     CONSUMER_NAME: example
+  #   depends_on:
+  #     producer:
+  #       condition: service_started
+  # consumer-email:
+  #   image: kafka-demo-consumer:latest
+  #   environment:
+  #     CONSUMER_TOPIC: email-topic
+  #     CONSUMER_NAME: email
+  #   depends_on:
+  #     producer:
+  #       condition: service_started
