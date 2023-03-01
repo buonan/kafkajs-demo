@@ -31,8 +31,6 @@ dotenv.config();
     });
 
     await consumer?.initConsumer();
-    do {
-        await consumer?.startConsumer();
-        //await new Promise(f => setTimeout(f, 100));
-    } while (true);
+    await consumer?.startConsumer();
 })();
+console.log(`Running`)

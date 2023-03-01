@@ -119,3 +119,29 @@ Messages sent 18322
 
 Shutting down
 Processed 18322
+
+# Run for 30s
+`timeout 35 node ./dist/index.js example-topic`
+Caught SIGTERM
+Shutting down
+Messages sent 20948
+
+`timeout 30 node ./dist/index.js example-topic example`
+Caught SIGTERM
+Shutting down
+Processed 14657
+
+# x2
+`timeout 32 node ./dist/index.js example-topic`
+Caught SIGTERM
+Shutting down
+Messages sent 10539
+
+`timeout 30 node ./dist/index.js example-topic example`
+Caught SIGTERM
+Shutting down
+Processed 4196
+
+Caught SIGTERM
+Shutting down
+Processed 5377
