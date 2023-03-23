@@ -1,22 +1,29 @@
 # How to use KafkaJS
+`dc up -d`
+
+ # How install kcat
+ brew install kcat
+
+# Install kafkajs-dlq
+git clone https://github.com/Nevon/kafkajs-dlq.git
 
 # How show topics
-`kafkacat -L -b kafka:9092`
+`kcat -L -b kafka:9092`
 
 # How Consume all messages
-`kafkacat -C -b localhost:9092 -t topic1`
+`kcat -C -b localhost:9092 -t topic1`
 
 # How list all topics and sort
-`kafkacat -b kafka:9092 -L -J | jq '.topics[].topic' | sort`
+`kcat -b kafka:9092 -L -J | jq '.topics[].topic' | sort`
 
 # How to log by service name
 `docker logs -t -f kafkajs-demo-consumer-2`
 
 # Manual run Consumer
-`time npm run start example-topic example`
+`time npm run start`
 
 # Manual run Producer
-`time npm run start example-topic`
+`time npm run start`
 
 # Performance testing x 1
 Shutting down

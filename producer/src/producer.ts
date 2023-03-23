@@ -1,15 +1,17 @@
 import { Kafka, logCreator, logLevel, Producer, ProducerBatch } from 'kafkajs'
+import { EmailMessage, SmsMessage } from "@buonan/published-packages";
 
 interface CustomMessageFormat { a: string }
-interface Message { key?: string, value: string }
+interface KafkaMessage { key?: string, value: string }
 interface TopicMessages {
   topic: string,
-  messages: Message[]
+  messages: KafkaMessage[]
 }
 interface TopicMessage {
   topic: string,
-  messages: Message[]
+  messages: KafkaMessage[]
 }
+
 export default class ProducerFactory {
   private producer?: Producer
   private topic: string;
@@ -36,6 +38,16 @@ export default class ProducerFactory {
     await this.producer?.disconnect()
   }
 
+  public async sendEmailMessage(msg: EmailMessage): Promise<void> {
+    // no key will send rount-robin to partitions
+    const topicMessage: TopicMessage = {
+      topic: this.topic,
+      messages: [{ value: JSON.stringify(msg) }]
+    }
+    this.messages += 1;
+    await this.producer?.send(topicMessage)
+  }
+
   public async sendMessage(msg: CustomMessageFormat): Promise<void> {
     // no key will send rount-robin to partitions
     const topicMessage: TopicMessage = {
@@ -47,7 +59,7 @@ export default class ProducerFactory {
   }
 
   public async sendBatch(topic: string, messages: Array<CustomMessageFormat>): Promise<void> {
-    const kafkaMessages: Array<Message> = messages.map((message) => {
+    const kafkaMessages: Array<KafkaMessage> = messages.map((message) => {
       return {
         key: '',
         value: JSON.stringify(message)

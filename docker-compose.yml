@@ -17,7 +17,7 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_NUM_PARTITIONS: 2
-      #KAFKA_CREATE_TOPICS: "test-topic:2:1"
+      #KAFKA_CREATE_TOPICS: "example-dead-letter-queue:2:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   # producer:

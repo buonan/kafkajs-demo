@@ -1,10 +1,15 @@
 import {
-    EachMessagePayload
+    EachMessagePayload,
 } from 'kafkajs'
-import { MessageProcessor } from '../consumer';
-import { EmailMessage } from 'published-packages';
+import { MessageProcessor } from '../../consumer';
 
-export default class EmailMessageProcessor implements MessageProcessor {
+interface KafkaMessage { key?: string, value: string }
+interface TopicMessage {
+    topic: string,
+    messages: KafkaMessage[]
+  }
+
+export default class MyExampleMessageReplayProcessor implements MessageProcessor {
     topic: string;
     groupId: string;
     processed: number;
@@ -18,10 +23,11 @@ export default class EmailMessageProcessor implements MessageProcessor {
     }
 
     onMessage = async (messagePayload: EachMessagePayload): Promise<void> => {
+        this.processed += 1;
         const { topic, partition, message } = messagePayload
         const prefix = `${topic}[${partition} | ${message.offset}] / ${message.timestamp}`
-        const msg: EmailMessage | null = JSON.parse(message?.value?.toString() || '')
         console.log(`- ${prefix} ${message.key}#${message.value}`)
+        await this.replayMessage(this.producer, this.topic, messagePayload);
         return;
     }
 }

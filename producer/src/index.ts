@@ -1,4 +1,5 @@
 import ProducerFactory from "./producer";
+import { EmailMessage, SmsMessage } from "@buonan/published-packages";
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
 
@@ -30,7 +31,23 @@ dotenv.config();
     await producer.init();
     await producer.connect();
     do {
-        await producer.sendMessage({ a: `hello ${new Date().toISOString()}`})
+        switch (PRODUCER_TOPIC) {
+            case 'example-topic':
+                // Send CustomMessageFormat
+                await producer.sendMessage({ a: `hello ${new Date().toISOString()}`});
+                break;
+            case 'email-topic':
+                // Send EmailMessage
+                let emailMessage: EmailMessage = {
+                    email: 'buonan@gmail.com',
+                    created_at: new Date(),
+                    message: 'Hello, world'
+                }
+                await producer.sendEmailMessage(emailMessage);
+                break;
+        }
+
+
         //await new Promise(f => setTimeout(f, 50));
     } while (true);
 })();

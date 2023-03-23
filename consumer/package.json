@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc --build",
     "build-image": "docker build --tag kafka-demo-consumer .",
-    "start": "node ./dist/index.js example-topic example"
+    "start": "node ./dist/index.js",
+    "start-example": "node ./dist/index.js example-topic example",
+    "debug": "node --inspect-brk"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "kafkajs": "^2.2.3"
+    "kafkajs": "^2.2.3",
+    "published-packages": "^1.0.0"
   }
 }
